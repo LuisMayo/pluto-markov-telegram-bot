@@ -15,10 +15,11 @@
   "author": "Inixio Amillano Casteig",
   "license": "ISC",
   "dependencies": {
+    "advanced-markov-generator": "git+https://github.com/LuisMayo/advanced-markov-generator.git",
     "dotenv": "^8.2.0",
     "fs": "0.0.1-security",
     "gtts": "^0.2.1",
-    "markov-generator": "^1.2.3",
+    "markov-generator": "git+https://github.com/LuisMayo/advanced-markov-generator.git",
     "mongoose": "^5.11.15",
     "mongoose-field-encryption": "^4.0.1",
     "node-telegram-bot-api": "^0.51.0",

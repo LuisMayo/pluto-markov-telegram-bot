@@ -1,4 +1,4 @@
-const MarkovGen = require('markov-generator');
+const MarkovGen = require('advanced-markov-generator');
 const workerpool = require('workerpool');
 const mongoose = require('mongoose');
 const connectAndGetSchema = require('./mongo-connector');
@@ -12,11 +12,14 @@ async function markov(chatId) {
     const input = messages.map(m => {
         return m.text;
     });
+    const probabilityForFirstWord = false;
     let markov = new MarkovGen({
         input,
-        minLength: 4
+        minLength: 1,
+        probabilityForFirstWord
     });
-    return markov.makeChain();
+    const output = markov.makeChain();
+    return output;
 }
 
 workerpool.worker({
