@@ -138,6 +138,7 @@ const generateSpeech = async (chatId, length) => {
         }
         return speech;
     } catch(e) {
+        console.log(e);
         return speech.length > 0 ? speech : 'Sorry, I need to learn more'; 
     }
 }
