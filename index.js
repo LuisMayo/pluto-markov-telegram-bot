@@ -9,7 +9,7 @@ const connectAndGetSchema  = require('./mongo-connector');
 
 require('dotenv').config();
 const pool = workerpool.pool(__dirname + '/markov-generator.js');
-console.log(`Hi! I'm MarTe (Markov Telegram) - v${pjson.version}`);
+console.log(`Hi! I'm Pluto - v${pjson.version}`);
 
 const bot = new TelegramBot(process.env.TOKEN, {polling: true});
 
@@ -241,13 +241,12 @@ onCommand(/^Yes$|^No$/, async (msg, match) => {
 })
 
 onCommand(/\/help/, async (msg, match) => {
-    bot.sendMessage(msg.chat.id, `I'm MarTe, I was created by <a href="https://twitter.com/inixiodev">@inixiodev</a>.`
+    bot.sendMessage(msg.chat.id, `I'm Pluto, I was created by <a href="https://twitter.com/LuisMayoV">@LuisMayoV</a>.`
         +` I'm pretty young (I'm ${pjson.version} versions old).` 
-        + ` I live in a Raspb...\n\nOh, okay... You're worried about your privacy, right?`
-        + ` I store messages in a database with no information about the author. Your messages are safely stored.\n\n`
+        + `I store messages in a database with no information about the author. Your messages are safely stored.\n\n`
         + `You can delete all the messages stored from this group with the /delete command\n\n`
-        + `You can check my source code <a href="https://github.com/inixioamillano/marte-markov-telegram-bot">here</a>`
-        + `\n\nSupport this project buying me a coffe at <a href="https://ko-fi.com/inixiodev/">Ko-Fi</a>`,
+        + `You can check my source code <a href="https://github.com/LuisMayo/pluto-markov-telegram-bot">here</a>`
+        + `\n\nSupport this project buying me a coffee at <a href="https://ko-fi.com/LuisMayo/">Ko-Fi</a>`,
     {
         parse_mode: 'HTML'
     });
@@ -496,12 +495,12 @@ onCommand(/\/commands/, (msg, match) => {
     bot.sendMessage(msg.chat.id, text);
 })
 
-onCommand(/\/contribute/, (msg, match) => {
-    bot.sendInvoice(msg.chat.id, 'Support MarTe', 'Help to keep this project alive with a small contribution', 'MarTe', process.env.PAYMENT_TOKEN, null, 'EUR', [{
-        label: 'MarTe | Contribution',
-        amount: 100
-    }])
-})
+// onCommand(/\/contribute/, (msg, match) => {
+//     bot.sendInvoice(msg.chat.id, 'Support MarTe', 'Help to keep this project alive with a small contribution', 'MarTe', process.env.PAYMENT_TOKEN, null, 'EUR', [{
+//         label: 'MarTe | Contribution',
+//         amount: 100
+//     }])
+// })
 
 onCommand(/\/backup/, async (msg) => {
     const chatId = msg.chat.id;

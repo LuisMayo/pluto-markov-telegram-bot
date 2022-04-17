@@ -1,7 +1,7 @@
 {
-  "name": "marte-markov-telegram-bot",
+  "name": "pluto-markov-telegram-bot",
   "version": "0.2.0",
-  "description": "MarTe (Markov Telegram) is a Telegram bot that, based on the Markov chain generation method, generates random messages on a group ",
+  "description": "Pluto is a Telegram bot that, based on the Markov chain generation method, generates random messages on a group ",
   "main": "index.ts",
   "scripts": {
     "start": "node index.js",
