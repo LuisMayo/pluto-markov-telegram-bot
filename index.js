@@ -81,8 +81,8 @@ const Sticker = new mongoose.model('Sticker', {
     count: Number
 })
 
-const generateMarkovMessage = async (chatId) => {
-    markovResult = await pool.exec('markov', [chatId]);
+const generateMarkovMessage = async (chatId, hint) => {
+    markovResult = await pool.exec('markov', [chatId, hint]);
     return markovResult.replace(new RegExp(`@${process.env.TELEGRAM_BOT_USER}`, 'g'), '');
 }
 
@@ -254,7 +254,8 @@ onCommand(/\/help/, async (msg, match) => {
 
 bot.onText(new RegExp(`@${process.env.TELEGRAM_BOT_USER}`, 'g'), async (msg, match) => {
     if (!msg.text.startsWith('/') && !isRemoveOption(msg)) {
-        generateMarkovMessage(msg.chat.id)
+        const possibleHints = msg.text.replace(new RegExp(`@${process.env.TELEGRAM_BOT_USER}`, 'g'), '').split(' ').filter(item => item.trim().length > 0);
+        generateMarkovMessage(msg.chat.id, possibleHints)
         .then((message) => {
             bot.sendMessage(msg.chat.id, message, {
                 reply_to_message_id: msg.message_id
@@ -407,10 +408,18 @@ const learnText = (chatId, document) => {
 
 const learnJSON = async (chatId, document) => {
     const stream = bot.getFileStream(document.file_id);
+    let fullStr = '';
     stream.on('data', (data) => {
         try {
             const str = data.toString();
-            const arr = JSON.parse(str);
+            fullStr += str;
+        } catch (e) {
+            bot.sendMessage(chatId, 'Sorry I couldn\'t learnt it. Does it have the right format?');
+        }
+    });
+    stream.on('end', () => {
+        try {
+            const arr = JSON.parse(fullStr);
             arr.forEach(element => {
                 Message.create({
                     text: element.replace(new RegExp(`@${process.env.TELEGRAM_BOT_USER}`, 'g'), ''),
@@ -421,7 +430,7 @@ const learnJSON = async (chatId, document) => {
         } catch (e) {
             bot.sendMessage(chatId, 'Sorry I couldn\'t learnt it. Does it have the right format?');
         }
-    });
+    })
 }
 
 const isTxtFile = (document) => {
