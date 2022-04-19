@@ -15,7 +15,6 @@ async function markov(chatId, hint) {
     const probabilityForFirstWord = false;
     let markov = new MarkovGen({
         input,
-        minLength: 1,
         probabilityForFirstWord
     });
     const output = markov.makeChain(hint);
