@@ -123,6 +123,14 @@ class Markov {
 			} else {
 				possibleNextWords = this.wordStats.get(word.toLowerCase());
 			}
+			if (chain.length < minLength) {
+				// We can't finish yet!
+				possibleNextWords.filter(word => word != null);
+			}
+			if (possibleNextWords.length === 0) {
+				// Oops, we outta options here
+				break;
+			}
 			previousWord = word;
 			word = this.choice(possibleNextWords);
 		}
