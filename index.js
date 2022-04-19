@@ -158,30 +158,22 @@ const onCommand = async (regex, callback) => {
 
 bot.on('message', (msg) => {
     if (msg.text && !msg.text.startsWith('/') && !isRemoveOption(msg)){
-        Message.create({
-            text: msg.text.replace(new RegExp(`@${process.env.TELEGRAM_BOT_USER}`, 'g'), ''),
-            chatId: msg.chat.id
-        }, async (err, message) => {
-            if (!err) {
-                const config = await Config.findOne({chatId: message.chatId})
-                const messages = await Message.find({chatId: message.chatId});
-                if (messages.length === 666){
-                    bot.sendMessage(message.chatId, 'I\'ve learnt 666 messages 😈')
-                } else {
-                    if (messages.length % (config ? config.frequency : 10) === 0) {
-                        const rand = Math.random();
-                        if (rand > 0.15){
-                            sendMarkovMessage(message.chatId);
-                        } else {
-                            const sent = await sendSticker(msg.chat.id);
-                            if (!sent){
-                                sendMarkovMessage(message.chatId);
-                            }
-                        }
-                    }
+        if (/^ *(http(s)?:\/\/.)?(www\.)?[-a-zA-Z0-9@:%._\+~#=]{2,256}\.[a-z]{2,6}\b([-a-zA-Z0-9@:%_\+.~#?&//=]*) *$/.test(msg.text)) {
+            // If it is an URL the bot may react but not save it
+            await reactToNewMessage(msg);
+        } else {
+            Message.create({
+                text: msg.text.replace(new RegExp(`@${process.env.TELEGRAM_BOT_USER}`, 'g'), ''),
+                chatId: msg.chat.id
+            }, async (err, message) => {
+                if (!err) {
+                    await reactToNewMessage(msg);
                 }
             }
-        });
+            )
+        }
+    } else {
+        await reactToNewMessage(msg);
     }
 })
 
@@ -522,3 +514,24 @@ onCommand(/\/backup/, async (msg) => {
 })
 
 bot.on('polling_error', (e) => console.log(e))
+
+async function reactToNewMessage(msg) {
+    const config = await Config.findOne({ chatId: msg.chat.id });
+    const messages = await Message.find({ chatId: msg.chat.id });
+    if (messages.length === 666) {
+        bot.sendMessage(msg.chat.id, 'I\'ve learnt 666 messages 😈');
+    } else {
+        // Messages IDs are sequential and exclusive to each chat
+        if (msg.message_id % (config ? config.frequency : 10) === 0) {
+            const rand = Math.random();
+            if (rand > 0.15) {
+                sendMarkovMessage(msg.chat.id);
+            } else {
+                const sent = await sendSticker(msg.chat.id);
+                if (!sent) {
+                    sendMarkovMessage(msg.chat.id);
+                }
+            }
+        }
+    }
+}
