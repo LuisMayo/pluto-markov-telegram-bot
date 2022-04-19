@@ -1,4 +1,4 @@
-const MarkovGen = require('advanced-markov-generator');
+const MarkovGen = require('./markov');
 const workerpool = require('workerpool');
 const mongoose = require('mongoose');
 const connectAndGetSchema = require('./mongo-connector');
