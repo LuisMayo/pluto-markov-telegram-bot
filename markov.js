@@ -96,7 +96,8 @@ class Markov {
       if (deepness >= 5) {
         throw new Error("Sorry, I'm not able to generate a chain");
       }
-      if (deepness > 3) {
+      if (deepness > 3 || (Array.isArray(startWord) && startWord.length === 0)) {
+        // If we're too deep or the array is empty act as usual
           startWord = null;
       }
       if (startWord && !Array.isArray(startWord)) {

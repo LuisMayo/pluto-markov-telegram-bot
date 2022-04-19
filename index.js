@@ -81,8 +81,8 @@ const Sticker = new mongoose.model('Sticker', {
     count: Number
 })
 
-const generateMarkovMessage = async (chatId) => {
-    markovResult = await pool.exec('markov', [chatId]);
+const generateMarkovMessage = async (chatId, hint) => {
+    markovResult = await pool.exec('markov', [chatId, hint]);
     return markovResult.replace(new RegExp(`@${process.env.TELEGRAM_BOT_USER}`, 'g'), '');
 }
 
@@ -255,7 +255,8 @@ onCommand(/\/help/, async (msg, match) => {
 
 bot.onText(new RegExp(`@${process.env.TELEGRAM_BOT_USER}`, 'g'), async (msg, match) => {
     if (!msg.text.startsWith('/') && !isRemoveOption(msg)) {
-        generateMarkovMessage(msg.chat.id)
+        const possibleHints = msg.text.replace(new RegExp(`@${process.env.TELEGRAM_BOT_USER}`, 'g'), '').split(' ').filter(item => item.trim().length > 0);
+        generateMarkovMessage(msg.chat.id, possibleHints)
         .then((message) => {
             bot.sendMessage(msg.chat.id, message, {
                 reply_to_message_id: msg.message_id
