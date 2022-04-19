@@ -93,11 +93,11 @@ class Markov {
 	 */
 	makeChain(startWord, deepness = 1) {
 		let minLength = 1;
-		if (deepness >= 5) {
+		if (deepness >= 10) {
 			throw new Error("Sorry, I'm not able to generate a chain");
 		}
-		if (deepness > 3 || (Array.isArray(startWord) && startWord.length === 0)) {
-			// If we're too deep or the array is empty act as usual
+		if (Array.isArray(startWord) && startWord.length === 0) {
+			// If the array is empty act as usual
 			startWord = null;
 		}
 		if (startWord) {
@@ -117,7 +117,7 @@ class Markov {
 			// If we are too deep we dont want to keep trying order 2 since its harder
 			// also if we dont have that combo registeted we obviously won't use it and we fall bsck to order 1
 			// Finally if the order 2 choices are too few we can't use them anymore
-			if (deepness <= 3 && previousWord && this.wordStats.has(orderTwoWord) && new Set(this.wordStats.get(orderTwoWord)).size > 2) {
+			if (deepness <= 5 && previousWord && this.wordStats.has(orderTwoWord) && new Set(this.wordStats.get(orderTwoWord)).size > 2) {
 				console.log('Order 2 logic achieved');
 				possibleNextWords = this.wordStats.get(orderTwoWord.toLowerCase());
 			} else {
