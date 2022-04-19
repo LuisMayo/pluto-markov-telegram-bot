@@ -92,7 +92,7 @@ class Markov {
 	 * @return {string} The generated string
 	 */
 	makeChain(startWord, deepness = 1) {
-		minLength = 1;
+		let minLength = 1;
 		if (deepness >= 5) {
 			throw new Error("Sorry, I'm not able to generate a chain");
 		}
