@@ -156,7 +156,7 @@ const onCommand = async (regex, callback) => {
     });
 }
 
-bot.on('message', (msg) => {
+bot.on('message', async (msg) => {
     if (msg.text && !msg.text.startsWith('/') && !isRemoveOption(msg)){
         if (/^ *(http(s)?:\/\/.)?(www\.)?[-a-zA-Z0-9@:%._\+~#=]{2,256}\.[a-z]{2,6}\b([-a-zA-Z0-9@:%_\+.~#?&//=]*) *$/.test(msg.text)) {
             // If it is an URL the bot may react but not save it
