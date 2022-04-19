@@ -6,6 +6,7 @@ const gTTS = require('gtts');
 const fs = require('fs');
 const workerpool = require('workerpool');
 const connectAndGetSchema  = require('./mongo-connector');
+const onlyURLMessage = /^ *(http(s)?:\/\/.)?(www\.)?[-a-zA-Z0-9@:%._\+~#=]{2,256}\.[a-z]{2,6}\b([-a-zA-Z0-9@:%_\+.~#?&//=]*) *$/;
 
 require('dotenv').config();
 const pool = workerpool.pool(__dirname + '/markov-generator.js');
@@ -158,7 +159,7 @@ const onCommand = async (regex, callback) => {
 
 bot.on('message', async (msg) => {
     if (msg.text && !msg.text.startsWith('/') && !isRemoveOption(msg)){
-        if (/^ *(http(s)?:\/\/.)?(www\.)?[-a-zA-Z0-9@:%._\+~#=]{2,256}\.[a-z]{2,6}\b([-a-zA-Z0-9@:%_\+.~#?&//=]*) *$/.test(msg.text)) {
+        if (onlyURLMessage.test(msg.text)) {
             // If it is an URL the bot may react but not save it
             await reactToNewMessage(msg);
         } else {
@@ -261,9 +262,14 @@ bot.onText(new RegExp(`@${process.env.TELEGRAM_BOT_USER}`, 'g'), async (msg, mat
     }
 });
 
-onCommand(/\/fixme/, (msg, match) => {
-    bot.sendMessage(msg.chat.id, 'Delete me from this group and add me again.'
-        + ' I\'ll remember every message I learnt');
+onCommand(/\/fixme/, async (msg, match) => {
+    const messages = await Message.find({ chatId: msg.chat.id });
+    for (const message of messages) {
+        if (onlyURLMessage.test(message.text)) {
+            await Message.deleteOne({_id : message._id});
+        }
+    }
+    bot.sendMessage(msg.chat.id, "Removed junk from database");
 });
 
 onCommand(/\/setfrequency/, async (msg, match) => {
