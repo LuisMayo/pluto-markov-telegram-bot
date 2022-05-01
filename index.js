@@ -502,12 +502,12 @@ onCommand(/\/commands/, (msg, match) => {
     bot.sendMessage(msg.chat.id, text);
 })
 
-// onCommand(/\/contribute/, (msg, match) => {
-//     bot.sendInvoice(msg.chat.id, 'Support MarTe', 'Help to keep this project alive with a small contribution', 'MarTe', process.env.PAYMENT_TOKEN, null, 'EUR', [{
-//         label: 'MarTe | Contribution',
-//         amount: 100
-//     }])
-// })
+onCommand(/\/contribute/, (msg, match) => {
+    bot.sendInvoice(msg.chat.id, 'Support MarTe', 'Help to keep this project alive with a small contribution', 'MarTe', process.env.PAYMENT_TOKEN, null, 'EUR', [{
+        label: 'MarTe | Contribution',
+        amount: 100
+    }])
+})
 
 onCommand(/\/backup/, async (msg) => {
     const chatId = msg.chat.id;
