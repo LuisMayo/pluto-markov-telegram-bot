@@ -3,7 +3,7 @@ Just another Telegram bot based on the Markov chain generation method.
 
 This bot reads messages from a group and periodically speaks generating random messages.
 
-This is a modified version of [Marte](https://github.com/inixioamillano/marte-markov-telegram-bot) which includes several differences in the markov generation algorithm. Like using a variable order 2 markov generation algorithm and having sentences which end less abruptly
+This is a modified version of [Marte](https://github.com/inixioamillano/marte-markov-telegram-bot) which includes several differences in the markov generation algorithm. Like using a variable order 2 markov generation algorithm and having sentences which end less abruptly. It also features several other improvements which are in the process of being backported to Marte. You can check them [here](https://github.com/inixioamillano/marte-markov-telegram-bot/pulls/LuisMayo) 
 
 <div>
 </div>
