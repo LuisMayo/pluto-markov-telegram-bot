@@ -9,8 +9,9 @@ module.exports = () => {
     console.log("Okay, let's see what I've learnt...")
     mongoose.connect(process.env.DB_HOST, { useNewUrlParser: true, useUnifiedTopology: true })
         .then(() => console.log("Interesting..."))
-        .catch(() => {
+        .catch((e) => {
             console.log("Whoops... Something went wrong");
+            console.log(e);
         });
     const MessageSchema = new mongoose.Schema({
         text: String,
