@@ -7,7 +7,7 @@ const mongooseFieldEncryption = require("mongoose-field-encryption").fieldEncryp
  */
 module.exports = () => {
     console.log("Okay, let's see what I've learnt...")
-    mongoose.connect(process.env.DB_HOST, { useNewUrlParser: true, useUnifiedTopology: true })
+    mongoose.connect(process.env.DB_HOST, { useNewUrlParser: true, useUnifiedTopology: false })
         .then(() => console.log("Interesting..."))
         .catch((e) => {
             console.log("Whoops... Something went wrong");
